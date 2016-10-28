@@ -1,0 +1,31 @@
+{
+  "name": "breakpoint-change.js",
+  "description": "breakpoint-change.js - A JavaScript library for receiving callbacks when stylesheet-defined breakpoints change.",
+  "main": "dist/breakpoint-change.js",
+  "authors": [
+    "Christofer Bodin <christofer@christoferbodin.se> (http://christoferbodin.se/)"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "change",
+    "event",
+    "listener",
+    "callback",
+    "responsive",
+    "breakpoint",
+    "css",
+    "stylesheet",
+    "media",
+    "query"
+  ],
+  "homepage": "https://github.com/cbodin/breakpoint-change.js#readme",
+  "ignore": [
+    "**/.*",
+    "lib",
+    ".gitignore",
+    "bower.json",
+    "gulpfile.js",
+    "package.json",
+    "README.md"
+  ]
+}
