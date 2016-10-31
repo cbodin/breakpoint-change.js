@@ -69,6 +69,25 @@ The selectors in the stylesheets should then be changed to:
 
 * NOTE: Internet Explorer might reorder combined selectors, e.g. `.breakpoint.change`, causing the selector parser to fail.
 
+To listen for changes in specific breakpoints, the `onEnter` and `onLeave` methods can be used instead.
+
+```js
+breakpointChange.onEnter('phone', function (breakpoint) {
+    // breakpoint will be the name of the breakpoint that we entered, 'phone' in this case.
+});
+breakpointChange.onLeave('phone', function (breakpoint) {
+    // breakpoint will be the name of the breakpoint that we left, 'phone' in this case.
+});
+```
+
+To remove a callback use the corresponding `off` methods.
+
+```js
+breakpointChange.off(callback);
+breakpointChange.offEnter(name, callback);
+breakpointChange.offLeave(name, callback);
+```
+
 ## Support
 
 Please [open an issue](https://github.com/cbodin/breakpoint-change.js/issues/new) for support.
