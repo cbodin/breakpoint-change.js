@@ -1,4 +1,4 @@
-/*! breakpoint-change.js v1.0.0 | https://github.com/cbodin/breakpoint-change.js#readme */
+/*! breakpoint-change.js v1.0.1 | https://github.com/cbodin/breakpoint-change.js#readme */
 /**
  * A JavaScript library for receiving callbacks when stylesheet-defined breakpoints change.
  *
@@ -24,6 +24,8 @@ function BreakpointChange(window, selectorBase) {
   this.addedReadyListener = false;
   this.addedLoadListener = false;
   this.callbacks = [];
+  this.enterCallbacks = {};
+  this.leaveCallbacks = {};
   this.breakpoints = [];
   this.defaultBreakpoint = undefined;
   this.currentBreakpoint = undefined;
@@ -36,10 +38,29 @@ function BreakpointChange(window, selectorBase) {
  * @param {Function} callback
  */
 BreakpointChange.prototype.on = function (callback) {
-  var index = this.callbacks.indexOf(callback);
-  if (index == -1) {
-    this.callbacks.push(callback);
-  }
+  this.objectKeyArrayAdd(this, 'callbacks', callback);
+};
+
+/**
+ * Add a callback for when entering a specific breakpoint.
+ *
+ * @public
+ * @param {String} name
+ * @param {Function} callback
+ */
+BreakpointChange.prototype.onEnter = function (name, callback) {
+  this.objectKeyArrayAdd(this.enterCallbacks, name, callback);
+};
+
+/**
+ * Add a callback for when leaving a specific breakpoint.
+ *
+ * @public
+ * @param {String} name
+ * @param {Function} callback
+ */
+BreakpointChange.prototype.onLeave = function (name, callback) {
+  this.objectKeyArrayAdd(this.leaveCallbacks, name, callback);
 };
 
 /**
@@ -49,10 +70,29 @@ BreakpointChange.prototype.on = function (callback) {
  * @param {Function} callback
  */
 BreakpointChange.prototype.off = function (callback) {
-  var index = this.callbacks.indexOf(callback);
-  if (index != -1) {
-    this.callbacks.splice(index, 1);
-  }
+  this.objectKeyArrayRemove(this, 'callbacks', callback);
+};
+
+/**
+ * Remove a previously added enter callback.
+ *
+ * @public
+ * @param {String} name
+ * @param {Function} callback
+ */
+BreakpointChange.prototype.offEnter = function (name, callback) {
+  this.objectKeyArrayRemove(this.enterCallbacks, name, callback);
+};
+
+/**
+ * Remove a previously added leave callback.
+ *
+ * @public
+ * @param {String} name
+ * @param {Function} callback
+ */
+BreakpointChange.prototype.offLeave = function (name, callback) {
+  this.objectKeyArrayRemove(this.leaveCallbacks, name, callback);
 };
 
 /**
@@ -175,7 +215,7 @@ BreakpointChange.prototype.getBreakpoints = function () {
  * the name and a flag indicating if this is the default breakpoint.
  *
  * @private
- * @param {CSSRuleList} rules
+ * @param {Array} cssRules
  * @return {Object|undefined}
  */
 BreakpointChange.prototype.findBreakpoint = function (cssRules) {
@@ -218,8 +258,59 @@ BreakpointChange.prototype.matchMedia = function () {
   if (match && match.name != currentBreakpoint) {
     this.currentBreakpoint = match.name;
 
+    if (Object.prototype.hasOwnProperty.call(this.leaveCallbacks, currentBreakpoint)) {
+      this.leaveCallbacks[currentBreakpoint].forEach(function (callback) {
+        callback(currentBreakpoint);
+      });
+    }
+
     this.callbacks.forEach(function (callback) {
       callback(match.name, currentBreakpoint);
     });
+
+    if (Object.prototype.hasOwnProperty.call(this.enterCallbacks, match.name)) {
+      this.enterCallbacks[match.name].forEach(function (callback) {
+        callback(match.name);
+      });
+    }
+  }
+};
+
+/**
+ * Add an item to an array that might not exist on an objects property.
+ * Creates a new array if the property does not exist.
+ *
+ * @private
+ * @param {Object} object
+ * @param {String} key
+ * @param {*} item
+ */
+BreakpointChange.prototype.objectKeyArrayAdd = function (object, key, item) {
+  if (!Object.prototype.hasOwnProperty.call(object, key)) {
+    object[key] = [];
+  }
+
+  var index = object[key].indexOf(item);
+  if (index == -1) {
+    object[key].push(item);
+  }
+};
+
+/**
+ * Remove an item from an objects property if it's an array.
+ *
+ * @private
+ * @param {Object} object
+ * @param {String} key
+ * @param {*} item
+ */
+BreakpointChange.prototype.objectKeyArrayRemove = function (object, key, item) {
+  if (!Object.prototype.hasOwnProperty.call(object, key)) {
+    return;
+  }
+
+  var index = object[key].indexOf(item);
+  if (index != -1) {
+    object[key].splice(index, 1);
   }
 };
