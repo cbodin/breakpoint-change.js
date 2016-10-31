@@ -52,6 +52,7 @@ breakpointChange.on(function (breakpoint, oldBreakpoint) {
     // The class/id prefix is removed, e.g. for a window width of 300px,
     // breakpoint = 'phone'
 });
+breakpointChange.init();
 ```
 
 If you need to change the first part of the selector, you can pass in an
