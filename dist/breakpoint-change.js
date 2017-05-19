@@ -201,7 +201,9 @@ BreakpointChange.prototype.getBreakpoints = function () {
     for (var j = 0; j < rules.length; j++) {
       var rule = rules[j];
 
-      if (rule.type === 4) {
+      if (rule.type === 3) {
+        breakpoints = breakpoints.concat(this.getBreakpoints([rule.styleSheet]));
+      } else if (rule.type === 4) {
         var breakpoint = this.findBreakpoint(rule.cssRules);
 
         if (breakpoint) {
