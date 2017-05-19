@@ -190,8 +190,8 @@ BreakpointChange.prototype.setup = function () {
  * @private
  * @return {Array}
  */
-BreakpointChange.prototype.getBreakpoints = function () {
-  var sheets = this.document.styleSheets;
+BreakpointChange.prototype.getBreakpoints = function (stylesheets) {
+  var sheets = stylesheets || this.document.styleSheets;
   var breakpoints = [];
 
   for (var i = 0; i < sheets.length; i++) {
@@ -272,9 +272,11 @@ BreakpointChange.prototype.matchMedia = function () {
     }
   });
 
-  if (match && match.name !== currentBreakpoint) {
+  if (match) {
     this.currentBreakpoint = match.name;
+  }
 
+  if (match && match.name !== currentBreakpoint) {
     if (Object.prototype.hasOwnProperty.call(this.leaveCallbacks, currentBreakpoint)) {
       this.leaveCallbacks[currentBreakpoint].forEach(function (callback) {
         callback(currentBreakpoint);
