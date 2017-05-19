@@ -1,4 +1,4 @@
-/*! breakpoint-change.js v1.0.1 | https://github.com/cbodin/breakpoint-change.js#readme */
+/*! breakpoint-change.js v1.1.1 | https://github.com/cbodin/breakpoint-change.js#readme */
 ;(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define([], factory);

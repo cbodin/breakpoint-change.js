@@ -1,6 +1,6 @@
 {
   "name": "breakpoint-change.js",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "breakpoint-change.js - A JavaScript library for receiving callbacks when stylesheet-defined breakpoints change.",
   "main": "lib/breakpoint-change.js",
   "dependencies": {},
