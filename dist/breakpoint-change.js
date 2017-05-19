@@ -125,13 +125,13 @@ BreakpointChange.prototype.init = function () {
   var state = this.document.readyState;
 
   // If the document is still loading, wait for it to load.
-  if (state == 'loading' && !this.addedReadyListener) {
+  if (state === 'loading' && !this.addedReadyListener) {
     this.document.addEventListener('DOMContentLoaded', this.onInitTriggerListener);
     this.addedReadyListener = true;
   }
 
   // The document is loaded, wait for the window to load.
-  else if (state == 'interactive' && !this.addedLoadListener) {
+  else if (state === 'interactive' && !this.addedLoadListener) {
     this.window.addEventListener('load', this.onInitTriggerListener);
     this.addedLoadListener = true;
   }
@@ -201,7 +201,7 @@ BreakpointChange.prototype.getBreakpoints = function () {
     for (var j = 0; j < rules.length; j++) {
       var rule = rules[j];
 
-      if (rule.type == 4) {
+      if (rule.type === 4) {
         var breakpoint = this.findBreakpoint(rule.cssRules);
 
         if (breakpoint) {
@@ -235,11 +235,11 @@ BreakpointChange.prototype.findBreakpoint = function (cssRules) {
 
   for (var i = 0; i < rules.length; i++) {
     // This is a style rule and not a media rule
-    if (rules[i].type == 1) {
+    if (rules[i].type === 1) {
       var matches = rules[i].selectorText.match(this.selectorRegex);
       if (matches) {
         match = {
-          isDefault: matches[1] == '#',
+          isDefault: matches[1] === '#',
           name: matches[2]
         };
       }
@@ -266,7 +266,7 @@ BreakpointChange.prototype.matchMedia = function () {
     }
   });
 
-  if (match && match.name != currentBreakpoint) {
+  if (match && match.name !== currentBreakpoint) {
     this.currentBreakpoint = match.name;
 
     if (Object.prototype.hasOwnProperty.call(this.leaveCallbacks, currentBreakpoint)) {
@@ -302,7 +302,7 @@ BreakpointChange.prototype.objectKeyArrayAdd = function (object, key, item) {
   }
 
   var index = object[key].indexOf(item);
-  if (index == -1) {
+  if (index === -1) {
     object[key].push(item);
   }
 };
@@ -321,7 +321,7 @@ BreakpointChange.prototype.objectKeyArrayRemove = function (object, key, item) {
   }
 
   var index = object[key].indexOf(item);
-  if (index != -1) {
+  if (index !== -1) {
     object[key].splice(index, 1);
   }
 };
